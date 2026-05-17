@@ -56,3 +56,23 @@ Thumbs.db
 # Project specific
 storage/
 *.log
+
+# Report & document files (not source code)
+*.docx
+*.pdf
+~$*
+Appendix_A_Source_Code.md
+Capstone_Report_Draft.md
+
+# Utility/scratch scripts
+fix_md.py
+fix_md2.py
+fix_md3.py
+migration.py
+poster_template.html
+"new project prompt.txt"
+
+# Screenshots & images in root
+*.png
+*.jpg
+*.jpeg
