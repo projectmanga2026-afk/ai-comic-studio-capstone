@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Comic Studio — Academic Poster</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      fontFamily: 'Inter, sans-serif',
+      fontSize: '24px',
+      primaryColor: '#1e1b4b',
+      primaryTextColor: '#e0e7ff',
+      primaryBorderColor: '#6366f1',
+      lineColor: '#818cf8',
+      secondaryColor: '#0f172a',
+      tertiaryColor: '#1e293b',
+      edgeLabelBackground: '#0f172a',
+      clusterBkg: '#1e1b4b',
+      clusterBorder: '#4f46e5'
+    },
+    flowchart: {
+      useMaxWidth: true,
+      htmlLabels: true,
+      curve: 'basis',
+      nodeSpacing: 50,
+      rankSpacing: 80
+    }
+  });
+</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg-deep:    #050816;
+    --bg-mid:     #0d1224;
+    --bg-card:    rgba(15, 23, 60, 0.75);
+    --border-glow:#4f46e5;
+    --accent-purple: #7c3aed;
+    --accent-indigo: #4f46e5;
+    --accent-cyan:   #06b6d4;
+    --accent-pink:   #ec4899;
+    --accent-gold:   #f59e0b;
+    --text-bright:   #f0f4ff;
+    --text-muted:    #94a3b8;
+  }
+
+  @page { size: 70cm 100cm; margin: 0; }
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0; padding: 0;
+    width: 70cm; height: 100cm;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-bright);
+    overflow: hidden;
+
+    /* Deep dark background with layered complexity */
+    background-color: var(--bg-deep);
+
+    /* Layered: dot grid + diagonal lines + radial glow blobs */
+    background-image:
+      /* Floating radial glow — top left */
+      radial-gradient(ellipse 35% 30% at 10% 5%,  rgba(79, 70, 229, 0.35) 0%, transparent 70%),
+      /* Floating radial glow — top right */
+      radial-gradient(ellipse 30% 25% at 90% 8%,  rgba(6, 182, 212, 0.25) 0%, transparent 70%),
+      /* Floating radial glow — bottom center */
+      radial-gradient(ellipse 50% 40% at 50% 100%, rgba(124, 58, 237, 0.3) 0%, transparent 70%),
+      /* Subtle cross-hatch lines */
+      repeating-linear-gradient(
+        0deg, transparent, transparent 59px,
+        rgba(79, 70, 229, 0.07) 59px, rgba(79, 70, 229, 0.07) 60px
+      ),
+      repeating-linear-gradient(
+        90deg, transparent, transparent 59px,
+        rgba(79, 70, 229, 0.07) 59px, rgba(79, 70, 229, 0.07) 60px
+      );
+  }
+
+  /* ==== POSTER SHELL ==== */
+  .poster-container {
+    width: 100%; height: 100%;
+    padding: 0 3cm 2.5cm 3cm;
+    display: flex; flex-direction: column; gap: 1.5cm;
+  }
+
+  /* ==== HEADER ==== */
+  header {
+    margin: 0 -3cm;
+    position: relative;
+    padding: 2cm 4cm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+
+    /* Dark glassmorphism header */
+    background: linear-gradient(120deg,
+      rgba(15, 10, 60, 0.97) 0%,
+      rgba(10, 25, 70, 0.97) 50%,
+      rgba(5, 30, 60, 0.97) 100%
+    );
+    border-bottom: 3px solid transparent;
+    border-image: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan), var(--accent-pink)) 1;
+  }
+
+  /* Decorative comic-panel lines inside the header */
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      /* Manga speed lines — top left corner */
+      repeating-conic-gradient(from 200deg at 0% 0%,
+        transparent 0deg, transparent 2.5deg,
+        rgba(79, 70, 229, 0.08) 2.5deg, rgba(79, 70, 229, 0.08) 3deg
+      );
+    pointer-events: none;
+  }
+
+  header::after {
+    content: '';
+    position: absolute; right: 0; top: 0; bottom: 0;
+    width: 30%;
+    background-image:
+      repeating-conic-gradient(from 340deg at 100% 50%,
+        transparent 0deg, transparent 3deg,
+        rgba(6, 182, 212, 0.06) 3deg, rgba(6, 182, 212, 0.06) 3.5deg
+      );
+    pointer-events: none;
+  }
+
+  .header-left { max-width: 30%; position: relative; z-index: 1; flex-shrink: 0; }
+
+  h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 100pt; font-weight: 900;
+    margin: 0; line-height: 1.05;
+    text-transform: uppercase;
+    letter-spacing: -3px;
+    /* Gradient text */
+    background: linear-gradient(135deg, #ffffff 0%, #c7d2fe 40%, #67e8f9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px rgba(99, 102, 241, 0.6));
+  }
+
+  .subtitle {
+    font-size: 26pt; color: #a5b4fc;
+    margin-top: 0.7cm; font-weight: 500; letter-spacing: 0.5px;
+    text-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+  }
+
+  /* ==== UNI LOGO + YEAR ==== */
+  .uni-logo-block {
+    display: flex; align-items: center; gap: 0.6cm;
+    margin-bottom: 0.8cm;
+  }
+
+  .uni-logo {
+    height: 2.5cm; width: auto;
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+  }
+
+  .year-badge {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22pt; font-weight: 900;
+    color: var(--accent-gold);
+    text-shadow: 0 0 14px rgba(245, 158, 11, 0.7);
+    letter-spacing: 2px;
+    border: 2px solid rgba(245, 158, 11, 0.4);
+    padding: 0.1cm 0.4cm;
+    border-radius: 8px;
+    background: rgba(245, 158, 11, 0.08);
+  }
+
+  /* ==== ADVISOR CENTER ==== */
+  .advisor-center {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 0.8cm; flex-shrink: 0;
+  }
+
+  .advisor-photo {
+    width: 7cm; height: 7cm; border-radius: 50%;
+    background: rgba(99, 102, 241, 0.08);
+    border: 5px solid rgba(99, 102, 241, 0.6);
+    box-shadow:
+      0 0 0 10px rgba(99,102,241,0.08),
+      0 0 50px rgba(99, 102, 241, 0.5),
+      0 0 100px rgba(6, 182, 212, 0.2);
+    display: flex; align-items: center; justify-content: center;
+    color: #818cf8; font-size: 14pt; overflow: hidden; flex-shrink: 0;
+  }
+  .advisor-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+  .advisor-label { text-align: center; }
+
+  .advisor-tag {
+    font-size: 16pt; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 3px; color: var(--accent-cyan);
+    text-shadow: 0 0 14px rgba(6, 182, 212, 0.7);
+    margin-bottom: 0.3cm; display: block;
+  }
+
+  .advisor-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 34pt; font-weight: 800; color: #e0e7ff;
+    display: block;
+    text-shadow: 0 0 20px rgba(165, 180, 252, 0.5);
+  }
+
+  .advisor-dept {
+    font-size: 19pt; color: #94a3b8; display: block; margin-top: 0.2cm;
+  }
+
+  /* ==== STUDENTS RIGHT ==== */
+  .students-right {
+    position: relative; z-index: 1;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(12px);
+    padding: 1.2cm 1.5cm;
+    border-radius: 20px;
+    border: 1px solid rgba(236, 72, 153, 0.3);
+    box-shadow: 0 0 30px rgba(236, 72, 153, 0.1), inset 0 1px 0 rgba(255,255,255,0.06);
+    display: flex; flex-direction: column; gap: 0.8cm;
+    flex-shrink: 0;
+  }
+
+  .students-right strong {
+    font-size: 16pt; font-weight: 700; display: block; margin-bottom: 0.3cm;
+    text-transform: uppercase; letter-spacing: 2px;
+    color: var(--accent-pink);
+    text-shadow: 0 0 12px rgba(236, 72, 153, 0.6);
+  }
+
+  .person {
+    display: flex; align-items: center; gap: 0.5cm;
+    font-size: 16pt; line-height: 1.3; color: #cbd5e1;
+  }
+  .person-name { color: #e0e7ff; font-weight: 700; font-size: 18pt; }
+
+  .person-list {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.6cm 1cm;
+  }
+
+  .photo-placeholder {
+    width: 2.8cm; height: 2.8cm; border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    border: 3px solid rgba(99, 102, 241, 0.5);
+    box-shadow: 0 0 15px rgba(79, 70, 229, 0.3);
+    display: flex; align-items: center; justify-content: center;
+    color: #6366f1; font-size: 12pt; overflow: hidden; flex-shrink: 0;
+  }
+  .photo-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* ==== MAIN GRID ==== */
+  .grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 2cm; flex: 1; margin-top: 0.3cm;
+  }
+
+  .column { display: flex; flex-direction: column; gap: 1.8cm; }
+
+  /* ==== GLASS CARDS ==== */
+  .card {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 2cm;
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    box-shadow:
+      0 30px 60px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+    position: relative; overflow: hidden;
+  }
+
+  /* Top glow bar */
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--accent-purple), var(--accent-indigo), var(--accent-cyan));
+    border-radius: 24px 24px 0 0;
+  }
+
+  /* Subtle inner sparkle */
+  .card::after {
+    content: '';
+    position: absolute; top: -40%; right: -20%;
+    width: 60%; height: 80%;
+    background: radial-gradient(ellipse, rgba(99, 102, 241, 0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .card.right-card::before {
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-pink), var(--accent-purple));
+  }
+  .card.right-card::after {
+    background: radial-gradient(ellipse, rgba(6, 182, 212, 0.07) 0%, transparent 70%);
+  }
+
+  h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 40pt; font-weight: 800;
+    margin-top: 0; margin-bottom: 1cm;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    background: linear-gradient(90deg, #a5b4fc, #67e8f9);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    padding-bottom: 0.5cm;
+    border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+  }
+
+  .right-card h2 {
+    background: linear-gradient(90deg, #67e8f9, #f9a8d4);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+
+  p, li {
+    font-size: 22pt; line-height: 1.6;
+    margin-bottom: 0.7cm; color: #94a3b8;
+  }
+
+  .card strong { color: #c7d2fe; font-weight: 700; }
+
+  ul { padding-left: 1.2cm; margin-top: 0; }
+
+  li::marker { color: var(--accent-indigo); }
+
+  /* ==== DIAGRAM ==== */
+  .diagram-container {
+    width: 100%; height: 27cm;
+    background: rgba(5, 8, 30, 0.8);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1cm; margin-bottom: 0.5cm;
+    margin-top: 0.8cm;
+    box-shadow: inset 0 0 40px rgba(79, 70, 229, 0.1);
+    position: relative; overflow: hidden;
+  }
+
+  /* Grid lines inside diagram container */
+  .diagram-container::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(79, 70, 229, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79, 70, 229, 0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .diagram-container svg {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    height: auto !important;
+    position: relative; z-index: 1;
+  }
+
+  /* ==== IMAGES ==== */
+  .image-wrapper {
+    width: 100%; margin-bottom: 0.5cm;
+    border-radius: 14px; overflow: hidden;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    box-shadow:
+      0 0 0 1px rgba(6, 182, 212, 0.1),
+      0 15px 40px rgba(0,0,0,0.6);
+    display: flex; justify-content: center; align-items: center;
+    background: rgba(5, 8, 30, 0.5);
+  }
+
+  .image-wrapper img {
+    max-width: 100%; max-height: 19cm;
+    width: auto; height: auto; display: block; border-radius: 14px;
+  }
+
+  /* ==== CAPTIONS ==== */
+  .caption {
+    font-size: 18pt; text-align: center;
+    font-weight: 600; margin-top: 0; margin-bottom: 1cm;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--accent-indigo);
+    text-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+  }
+  .right-card .caption { color: var(--accent-cyan); text-shadow: 0 0 10px rgba(6, 182, 212, 0.4); }
+
+</style>
+</head>
+<body>
+
+<div class="poster-container">
+
+  <!-- ═══════════════ HEADER ═══════════════ -->
+  <header>
+    <!-- LEFT: Title + university logo + year -->
+    <div class="header-left">
+      <!-- University Logo -->
+      <div class="uni-logo-block">
+        <img src="Ostim-Teknik-Universitesi%20-%20Copy.jpg" alt="OSTİM Technical University" class="uni-logo">
+        <span class="year-badge">2026</span>
+      </div>
+      <h1>AI Comic<br>Studio</h1>
+      <div class="subtitle">A Multi-Character Generative AI Pipeline<br>for Visual Storytelling</div>
+    </div>
+
+    <!-- CENTER: Advisor — big & prominent -->
+    <div class="advisor-center">
+      <div class="advisor-photo">
+        <img src="professor%20-%20Copy.png" alt="Prof. Dr. Meltem Eryılmaz">
+      </div>
+      <div class="advisor-label">
+        <span class="advisor-tag">Project Advisor</span>
+        <span class="advisor-name">Prof. Dr. Meltem Eryılmaz</span>
+        <span class="advisor-dept">Faculty of Computer Science</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: 4 Students compact grid -->
+    <div class="students-right">
+      <strong>Research Team</strong>
+      <div class="person-list">
+        <div class="person">
+          <div class="photo-placeholder">
+            <img src="yousef%20-%20Copy.png" alt="Yousef">
+          </div>
+          <div><span class="person-name">Yousef Elgabry</span><br>Full Stack</div>
+        </div>
+        <div class="person">
+          <div class="photo-placeholder">
+            <img src="mahmoud%20-%20Copy.png" alt="Mahmoud">
+          </div>
+          <div><span class="person-name">Mahmoud Abdelwahab</span><br>Backend / MLOps</div>
+        </div>
+        <div class="person">
+          <div class="photo-placeholder">
+            <img src="khaled%20-%20Copy.jpg" alt="Khaled">
+          </div>
+          <div><span class="person-name">Khaled Alkhalaf</span><br>MLOps</div>
+        </div>
+        <div class="person">
+          <div class="photo-placeholder">
+            <img src="abdallah%20-%20Copy.jpg" alt="Abdallah">
+          </div>
+          <div><span class="person-name">Abdullah Elgamasy</span><br>MLOps</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════ MAIN BODY ═══════════════ -->
+  <div class="grid">
+
+    <!-- LEFT: Context + Architecture -->
+    <div class="column">
+      <div class="card">
+
+        <h2>Problem Definition</h2>
+        <ul>
+          <li>Traditional comic creation demands immense <strong>artistic skill</strong>, time, and financial resources.</li>
+          <li>Existing generative AI tools struggle with <strong>character consistency</strong> across multiple scenes.</li>
+          <li>Current diffusion models suffer from <strong>concept bleeding</strong> when generating multiple distinct characters in a single panel.</li>
+        </ul>
+
+        <h2 style="margin-top: 1cm;">Objectives</h2>
+        <ul>
+          <li><strong>Zero-Shot Identity:</strong> Use PuLID & IP-Adapter for biometric character anchoring — no model training required.</li>
+          <li><strong>Spatial Coherence:</strong> Leverage <strong>Flux.1</strong> Transformer to eliminate concept bleeding in multi-character panels.</li>
+          <li><strong>Unified Workspace:</strong> React/Konva drag-and-drop canvas for layout assembly and speech bubble typesetting.</li>
+        </ul>
+
+        <h2 style="margin-top: 1cm;">Architecture</h2>
+        <p style="margin-bottom: 0;">A decoupled pipeline: Next.js frontend → FastAPI backend → headless ComfyUI on Colab GPU.</p>
+
+        <div class="diagram-container">
+          <div class="mermaid" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+            graph TD
+              classDef frontend fill:#1e1b4b,stroke:#6366f1,stroke-width:3px,color:#c7d2fe;
+              classDef backend fill:#052e16,stroke:#16a34a,stroke-width:3px,color:#86efac;
+              classDef gpu fill:#2e1065,stroke:#9333ea,stroke-width:3px,color:#e9d5ff;
+              classDef user fill:#431407,stroke:#ea580c,stroke-width:3px,color:#fed7aa;
+
+              User(("🧑‍🎨 Creator")):::user
+
+              subgraph Client ["  Next.js / React  "]
+                UI["Studio Canvas\nCharacter Manager"]:::frontend
+              end
+
+              subgraph Server ["  FastAPI Backend  "]
+                API["Router & SQLite DB"]:::backend
+              end
+
+              subgraph AI ["  Google Colab GPU  "]
+                Comfy["ComfyUI Orchestrator"]:::gpu
+                Flux["Flux.1 + PuLID + LoRA"]:::gpu
+              end
+
+              User -->|Interacts| UI
+              UI -->|HTTP POST| API
+              API -->|ngrok + JSON| Comfy
+              Comfy -->|Inference| Flux
+              Flux -->|Image| Comfy
+              Comfy -->|WebSocket| API
+              API -->|Static File| UI
+          </div>
+        </div>
+        <p class="caption">Fig 1: System Architecture</p>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: Screenshots -->
+    <div class="column">
+      <div class="card right-card" style="height: 100%;">
+        <h2>System Output</h2>
+
+        <div class="image-wrapper">
+          <img src="character%20tab.png" alt="Character Sheet">
+        </div>
+        <p class="caption">Fig 2: Biometric Identity Generation Panel</p>
+
+        <div class="image-wrapper">
+          <img src="Canvas.png" alt="Studio Canvas">
+        </div>
+        <p class="caption">Fig 3: Drag-and-Drop Comic Assembly Canvas</p>
+
+        <div class="image-wrapper">
+          <img src="Comic%20Page.png" alt="Final Comic Output">
+        </div>
+        <p class="caption">Fig 4: Final AI-Generated Typeset Comic Page</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "1":  {"inputs": {"unet_name": "FLUX_UNET",  "weight_dtype": "default"}, "class_type": "UNETLoader"},
+  "6":  {"inputs": {"clip_name1": "FLUX_T5", "clip_name2": "FLUX_CLIP_L", "type": "flux"}, "class_type": "DualCLIPLoader"},
+  "5":  {"inputs": {"vae_name": "FLUX_VAE"}, "class_type": "VAELoader"},
+  "2":  {"inputs": {"text": "POSITIVE_PROMPT", "clip": ["6", 0]}, "class_type": "CLIPTextEncode"},
+  "3":  {"inputs": {"text": "", "clip": ["6", 0]}, "class_type": "CLIPTextEncode"},
+  "35": {"inputs": {"guidance": 3.5, "conditioning": ["2", 0]}, "class_type": "FluxGuidance"},
+  "9":  {"inputs": {"width": 832, "height": 1216, "batch_size": 1}, "class_type": "EmptySD3LatentImage"},
+  "10": {"inputs": {
+          "seed": 42, "steps": 28, "cfg": 1.0,
+          "sampler_name": "euler", "scheduler": "beta", "denoise": 1.0,
+          "model": ["1", 0],
+          "positive": ["35", 0],
+          "negative": ["3", 0],
+          "latent_image": ["9", 0]},
+         "class_type": "KSampler"},
+  "11": {"inputs": {"samples": ["10", 0], "vae": ["5", 0]}, "class_type": "VAEDecode"},
+  "12": {"inputs": {"filename_prefix": "panel_flux", "images": ["11", 0]}, "class_type": "SaveImage"}
+}
